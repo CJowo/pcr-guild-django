@@ -20,10 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q1n_i^d#m0i7fj2yp9=^qjwj7(93fipcrb7^les3%jhy5kw1v3'
+SECRET_KEY = os.environ.get('PCR_SECRET_KEY') or 'q1n_i^d#m0i7fj2yp9=^qjwj7(93fipcrb7^les3%jhy5kw1v3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.environ.get('PCR_DEBUG') is None else (os.environ.get('PCR_DEBUG') == '1')
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'pcr.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.environ.get('PCR_SQLITE3_PATH') or os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
