@@ -12,6 +12,7 @@
 数据库迁移:
 
 `python manage.py makemigrations`
+
 `python manage.py migrate`
 
 关闭调试模式:
