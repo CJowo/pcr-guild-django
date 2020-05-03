@@ -115,6 +115,9 @@ def remove(request):
         except User.DoesNotExist:
             # 参数错误 400
             return HttpResponseBadRequest()
+        if user.is_superuser:
+            # 权限不足 403
+            return HttpResponseForbidden()
         user.delete()
         return HttpResponse()
     return HttpResponseNotFound()
@@ -125,7 +128,7 @@ def set_staff(request):
     修改用户管理员权限
     URL: /api/set_staff/
     Method: POST
-    Permission: 超级管理员
+    Permission: 管理员
     Param:
         username: 被修改用户名
         flag: true-设置 false-取消
@@ -134,7 +137,7 @@ def set_staff(request):
         if not request.user.is_authenticated:
             # 未登录 401
             return HttpUnauthorized()
-        if not request.user.is_superuser:
+        if not request.user.is_staff:
             # 权限不足 403
             return HttpResponseForbidden()
         try:

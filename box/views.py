@@ -31,7 +31,7 @@ def character_add(request):
         if request.user.box.filter(c_id=c_id):
             # 参数错误
             return HttpResponseBadRequest()
-        Character.objects.create(c_id=c_id, rank=1, star=1, max=False, owner=request.user)
+        Character.objects.create(c_id=c_id, rank=8, star=3, max=True, owner=request.user)
         return HttpResponse()
     return HttpResponseNotFound()
 

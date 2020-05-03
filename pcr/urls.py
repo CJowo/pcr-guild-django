@@ -14,13 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.shortcuts import render
+from django.views import static
 
+from . import settings
 from login.views import login, register, logout, remove, set_password, set_staff, get_detail, get_detail_all, set_detail
 from box.views import character_add, character_edit, character_remove
 
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('api/login/', login),
     path('api/register/', register),
     path('api/logout/', logout),
@@ -33,4 +37,6 @@ urlpatterns = [
     path('api/character_add/', character_add),
     path('api/character_edit/', character_edit),
     path('api/character_remove/', character_remove),
+    re_path('^(?!static).*', lambda request: render(request, 'index.html')),
+    re_path('^static/(?P<path>.*)', static.serve, { 'document_root': settings.STATIC_ROOT })
 ]
