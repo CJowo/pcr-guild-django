@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'Asia/shanghai'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -121,6 +121,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "vue", "static")
+if DEBUG: 
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "vue", "static"),
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "vue", "static")
 
 AUTH_USER_MODEL = 'login.User'
+
+SESSION_COOKIE_SAMESITE = None

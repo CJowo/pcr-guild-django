@@ -37,6 +37,10 @@ urlpatterns = [
     path('api/character_add/', character_add),
     path('api/character_edit/', character_edit),
     path('api/character_remove/', character_remove),
-    re_path('^(?!static).*', lambda request: render(request, 'index.html')),
-    re_path('^static/(?P<path>.*)', static.serve, { 'document_root': settings.STATIC_ROOT })
+    re_path('^(?!static).*', lambda request: render(request, 'index.html'))
 ]
+
+if not settings.DEBUG:
+    urlpatterns += [
+        re_path('^static/(?P<path>.*)', static.serve, { 'document_root': settings.STATIC_ROOT })
+    ]
