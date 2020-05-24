@@ -39,11 +39,19 @@ def register(request):
 @allow(['POST'])
 @parameter({
     'type': 'object',
+    'properties': {
+        'username': {
+            'type': 'string'
+        },
+        'password': {
+            'type': 'string'
+        }
+    },
     'required':['username', 'password']
 })
 def login(request):
-    username = request.POST.get('username')
-    password =request.POST.get('password')
+    username = request.data.get('username')
+    password =request.data.get('password')
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
