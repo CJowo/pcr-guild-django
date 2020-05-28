@@ -58,7 +58,7 @@ def login(request):
         return HttpResponse(content='Username does not exist', status=400)
     if user.check_password(password) is False:
         return HttpResponse(content='Incorrect username or password', status=400)
-    request.session['user_id'] = user.id
+    request.session['user_id'] = user.id.hex
     return HttpResponse(json.dumps(user.detail), content_type='application/json')
 
 
@@ -67,6 +67,12 @@ def logout(request):
     if 'user_id' in request.session:
         del request.session['user_id']
     return HttpResponse()
+
+
+@allow(['GET'])
+@authenticate
+def info(request):
+    return HttpResponse(json.dumps(request.user.detail), content_type='application/json')
 
 
 @allow(['POST'])
@@ -82,8 +88,7 @@ def logout(request):
             'type': 'string',
             'pattern': User.USER_PATTERN_DESC
         },
-    },
-    'required':['nickname', 'desc']
+    }
 })
 def edit(request):
     try:

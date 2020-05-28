@@ -12,9 +12,9 @@ class User(models.Model):
     # 长度1~16
     USER_PATTERN_NICKNAME = r'^.{1,16}$'
     # 长度0~32
-    USER_PATTERN_DESC = r'^.{0,32}$'
+    USER_PATTERN_DESC = r'^[\s\S]{0,32}$'
 
-    id = models.CharField(max_length=36, default=lambda: uuid.uuid1().hex, primary_key=True)
+    id = models.UUIDField(default=uuid.uuid1, primary_key=True)
     username = models.CharField(max_length=24, unique=True)
     password = models.CharField(max_length=64)
     desc = models.CharField(max_length=32, default=u'')
@@ -66,7 +66,7 @@ class User(models.Model):
             'create': int(self.create.timestamp()),
             'desc': self.desc,
             'guild': None if self.guild is None else {
-                'id': self.guild.id,
+                'id': self.guild.id.hex,
                 'name': self.guild.name
             }
         }

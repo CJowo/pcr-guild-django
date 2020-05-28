@@ -8,6 +8,8 @@ from .response import HttpResponseIncorrectParameter
 from user.models import User
 
 
+PATTERN_UUID_HEX = r'^[a-z\d]{32}$'
+
 def authenticate(func):
     """
     用户认证
@@ -77,6 +79,37 @@ def parameter(schema: object):
                 for key in properties
                 if key in data or 'default' in properties[key]
             }
+            return func(request, *args, **kwargs)
+        
+        return wrapper
+
+    return decorator
+
+
+def pagination(default=10, min_size=1, max_size=20):
+    """
+    分页 限定GET请求, 其余请求不做更改
+
+    @param default: size默认值
+
+    @param min_size: size最小值
+
+    @param min_size: size最大值
+
+    获取参数page, size添加到request.page, request.size
+    """
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            if request.method != 'GET':
+                return func(request, *args, **kwargs)
+            page = request.GET.get('page', '1')
+            size = request.GET.get('size', str(default))
+            try:
+                request.page = int(page)
+                request.size = min(max(int(size), min_size), max_size)
+            except ValueError as err:
+                return HttpResponseIncorrectParameter(content=err)
             return func(request, *args, **kwargs)
         
         return wrapper

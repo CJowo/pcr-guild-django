@@ -4,10 +4,10 @@ from django.db import models
 
 
 class Guild(models.Model):
-    # 长度1~24
-    PATTERN_NAME = r'^.{1,24}$'
-    # 长度0~256
-    PATTERN_DESC = r'^.{0,256}$'
+    # 长度1~16
+    PATTERN_NAME = r'^.{1,16}$'
+    # 长度0~32
+    PATTERN_DESC = r'^[\s\S]{0,32}$'
     # 允许数字、字母、特殊符号，长度1~16
     PATTERN_PASSWORD = r'^[a-zA-Z\d\x21-\x7e]{1,16}$'
 
@@ -26,9 +26,9 @@ class Guild(models.Model):
         (JOIN_FORBID, u'Forbid'),
     )
 
-    id = models.CharField(max_length=36, default=lambda: uuid.uuid1().hex, primary_key=True)
-    name = models.CharField(max_length=24)
-    desc = models.CharField(max_length=256, default=u'')
+    id = models.UUIDField(default=uuid.uuid1, primary_key=True)
+    name = models.CharField(max_length=16)
+    desc = models.CharField(max_length=32, default=u'')
     create = models.DateTimeField(auto_now_add=True)
     # 加入方式
     join = models.IntegerField(choices=JOIN_CHOICES, default=JOIN_VALIDATE)
@@ -42,7 +42,7 @@ class Guild(models.Model):
     @property
     def detail(self):
         return {
-            'id': self.id,
+            'id': self.id.hex,
             'name': self.name,
             'desc': self.desc,
             'create': int(self.create.timestamp()),
@@ -65,16 +65,13 @@ class Guild(models.Model):
 
 
 class Application(models.Model):
-    PATTERN_DESC = r'^.{0,256}$'
-    PATTERN_REASON = r'^.{0,256}$'
+    PATTERN_DESC = r'^.{0,32}$'
 
-    id = models.CharField(max_length=36, default=lambda: uuid.uuid1().hex, primary_key=True)
+    id = models.UUIDField(default=uuid.uuid1, primary_key=True)
     # 申请描述
-    desc = models.CharField(max_length=256)
+    desc = models.CharField(max_length=32)
     # 申请状态
     status = models.BooleanField(null=True, blank=True)
-    # 拒绝理由
-    reason = models.CharField(max_length=256, default=u'')
     create = models.DateTimeField(auto_now_add=True)
     guild = models.ForeignKey(to='Guild', on_delete=models.CASCADE, related_name='applications')
     user = models.ForeignKey(to='user.User', on_delete=models.CASCADE, related_name='applications')
@@ -82,12 +79,11 @@ class Application(models.Model):
     @property
     def detail(self):
         return {
-            'id': self.id,
+            'id': self.id.hex,
             'status': self.status,
             'user': self.user.detail,
             'guild': self.guild.detail,
             'create': int(self.create.timestamp()),
-            'desc': self.desc,
-            'reason': self.reason
+            'desc': self.desc
         }
     

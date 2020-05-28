@@ -1,9 +1,10 @@
 import json
+import uuid
 
 from django.http.response import HttpResponse
 from django.db.utils import IntegrityError
 
-from pcr.utils import allow, authenticate, parameter
+from pcr.utils import allow, authenticate, parameter, pagination, PATTERN_UUID_HEX
 from user.models import User
 from .models import Guild, Application
 
@@ -44,25 +45,10 @@ def delete(request):
 
 @allow(['GET'])
 @authenticate
-@parameter({
-    'type': 'object',
-    'properties': {
-        'page': {
-            'type': 'number',
-            'min': 1,
-            'default': 1
-        },
-        'size': {
-            'type': 'number',
-            'min': 1,
-            'max': 20,
-            'default': 10
-        }
-    }
-})
+@pagination()
 def guild_list(request):
-    page = request.data.get('page')
-    size = request.data.get('size')
+    page = request.page
+    size = request.size
     start = size * (page - 1)
     end = size * (page - 1) + size
     response = {
@@ -82,7 +68,7 @@ def users(request):
     guild = request.user.guild
     response = {
         'users': [
-            user.detail for user in guild.users.all()
+            user.detail for user in guild.users.filter(operate=None).all()
         ],
         'operaters': [
             operater.detail for operater in guild.operaters.all()
@@ -92,21 +78,31 @@ def users(request):
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 
+@allow(['GET'])
+@authenticate
+def info(request):
+    if request.user.guild is None:
+        return HttpResponse('Guild does not exist', status=400)
+    return HttpResponse(json.dumps(request.user.guild.detail), content_type='application/json')
+
+
 @allow(['POST'])
 @authenticate
 @parameter({
     'type': 'object',
     'properties': {
         'id': {
-            'type': 'string'
+            'type': 'string',
+            'pattern': PATTERN_UUID_HEX
         },
         'password': {
             'type': 'string',
-            'default': ''
+            'default': Guild.PATTERN_PASSWORD
         },
         'desc': {
             'type': 'string',
-            'default': ''
+            'default': '',
+            'pattern': Application.PATTERN_DESC
         }
     },
     'required': ['id']
@@ -115,7 +111,7 @@ def join(request):
     if request.user.guild is not None:
         return HttpResponse(content=u'Already have a guild', status=400)
     try:
-        guild = Guild.objects.get(id=request.data.get('id'))
+        guild = Guild.objects.get(id=uuid.UUID(request.data.get('id')))
     except Guild.DoesNotExist as err:
         return HttpResponse(content=err, status=400)
     if guild.join == Guild.JOIN_FORBID:
@@ -128,13 +124,33 @@ def join(request):
     if guild.join == Guild.JOIN_PASSWORD:
         if request.data.get('password') == guild.password:
             request.user.guild = guild
+            Application.objects.create(guild=guild, user=request.user, status=True)
+            request.user.save()
+            request.user.applications.filter(status=None).delete()
             return HttpResponse('Successfully joined')
         else:
             return HttpResponse('Incorrect password', status=400)
     if guild.join == Guild.JOIN_AUTO:
         request.user.guild = guild
+        Application.objects.create(guild=guild, user=request.user, status=True)
+        request.user.save()
+        request.user.applications.filter(status=None).delete()
         return HttpResponse('Successfully joined')
     return HttpResponse(status=500)
+
+
+@allow(['POST', 'GET'])
+@authenticate
+def leave(request):
+    try:
+        request.user.manage
+    except User.manage.RelatedObjectDoesNotExist:
+        request.user.guild = None
+        request.user.operate = None
+        request.user.save()
+        return HttpResponse()
+    else:
+        return HttpResponse(content=u"You can't leave", status=400)
 
 
 @allow(['POST'])
@@ -177,7 +193,9 @@ def kick(request):
     'required': ['username', 'set']
 })
 def operate(request):
-    if request.user.manage is None:
+    try:
+        request.user.manage
+    except User.manage.RelatedObjectDoesNotExist:
         return HttpResponse('No permission', status=403)
     try:
         user = User.objects.get(username=request.data.get('username'), guild=request.user.manage)
@@ -193,33 +211,55 @@ def operate(request):
     return HttpResponse()
 
 
-@allow(['GET'])
+@allow(['POST'])
 @authenticate
 @parameter({
     'type': 'object',
     'properties': {
-        'page': {
-            'type': 'number',
-            'min': 1,
-            'default': 1
+        'name': {
+            'type': 'string',
+            'pattern': Guild.PATTERN_NAME
         },
-        'size': {
+        'desc': {
+            'type': 'string',
+            'pattern': Guild.PATTERN_DESC
+        },
+        'join': {
             'type': 'number',
-            'min': 1,
-            'max': 20,
-            'default': 10
+            'min': 0,
+            'max': 3
+        },
+        'password': {
+            'type': 'string',
+            'pattern': Guild.PATTERN_PASSWORD
         }
     }
 })
+def edit(request):
+    try:
+        request.user.manage
+    except User.manage.RelatedObjectDoesNotExist:
+        return HttpResponse('No permission', status=403)
+    try:
+        request.user.manage.__dict__.update(**request.data)
+        request.user.manage.save()
+    except IntegrityError as err:
+        return HttpResponse(content=err, status=400)
+    return HttpResponse()
+
+
+@allow(['GET'])
+@authenticate
+@pagination()
 def applications(request):
     user = request.user
     if user.operate is None:
         return HttpResponse('No permission', status=403)
-    page = request.data.get('page')
-    size = request.data.get('size')
+    page = request.page
+    size = request.size
     start = size * (page - 1)
     end = size * (page - 1) + size
-    applications = user.operate.applications.filter(status=None)
+    applications = user.operate.applications.filter()
     response = {
         'count': applications.count(),
         'data': [
@@ -235,29 +275,24 @@ def applications(request):
     'type': 'object',
     'properties': {
         'id': {
-            'type': 'string'
+            'type': 'string',
+            'pattern': PATTERN_UUID_HEX
         },
         'allow': {
-            'type': 'boolean',
-            'pattern': Application.PATTERN_DESC
-        },
-        'reason': {
-            'type': 'string',
-            'pattern': Application.PATTERN_REASON,
-            'default': ''
+            'type': 'boolean'
         }
     },
     'required': ['id', 'allow']
 })
 def validate(request):
     try:
-        application = Application.objects.get(id=request.data.get('id'), status=None)
+        application = Application.objects.get(id=uuid.UUID(request.data.get('id')), status=None)
     except Application.DoesNotExist as err:
         return HttpResponse(content=err, status=400)
     if request.data.get('allow') is True:
         application.user.guild = application.guild
         application.user.save()
+        application.user.applications.filter(status=None).delete()
     application.status = request.data.get('allow')
-    application.reason = request.data.get('reason')
     application.save()
     return HttpResponse()
