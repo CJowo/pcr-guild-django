@@ -22,6 +22,7 @@
 `> python manage.py runserver 0.0.0.0:80`
 
 
+默认管理密码 administrator
 
 ### 重置管理密码(需要安装sqlite)
 
