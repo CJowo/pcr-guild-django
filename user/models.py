@@ -70,3 +70,10 @@ class User(models.Model):
                 'name': self.guild.name
             }
         }
+    
+    @property
+    def detail_box(self):
+        return {
+            **self.detail,
+            'characters': [item.detail for item in self.characters.all()]
+        }

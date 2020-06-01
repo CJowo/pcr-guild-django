@@ -5,10 +5,12 @@ from django.http.response import HttpResponse
 from django.db.utils import IntegrityError
 
 from pcr.utils import allow, authenticate, parameter
+from admin.views import admin
 from .models import User
 
 
 @allow(['POST'])
+@admin(False)
 @parameter({
     'type': 'object',
     'properties': {
@@ -28,6 +30,9 @@ from .models import User
     'required':['username', 'password', 'nickname']
 })
 def register(request):
+    print(request.admin.register)
+    if request.admin.register == False:
+        return HttpResponse('Administrator prohibited this operation', status=403)
     try:
         user = User.objects.create(**request.data)
     except IntegrityError as err:
@@ -72,7 +77,7 @@ def logout(request):
 @allow(['GET'])
 @authenticate
 def info(request):
-    return HttpResponse(json.dumps(request.user.detail), content_type='application/json')
+    return HttpResponse(json.dumps(request.user.detail_box), content_type='application/json')
 
 
 @allow(['POST'])

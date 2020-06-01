@@ -6,10 +6,12 @@ from django.db.utils import IntegrityError
 
 from pcr.utils import allow, authenticate, parameter, pagination, PATTERN_UUID_HEX
 from user.models import User
+from admin.views import admin
 from .models import Guild, Application
 
 @allow(['POST'])
 @authenticate
+@admin(False)
 @parameter({
     'type': 'object',
     'properties': {
@@ -21,6 +23,8 @@ from .models import Guild, Application
     'required': ['name']
 })
 def create(request):
+    if request.admin.guild == False:
+        return HttpResponse('Administrator prohibited this operation', status=403)
     if request.user.guild is not None:
         return HttpResponse(content=u'Already have a guild', status=400)
     try:
@@ -75,6 +79,18 @@ def users(request):
         ],
         'owner': guild.owner.detail
     }
+    return HttpResponse(json.dumps(response), content_type='application/json')
+
+
+@allow(['GET'])
+@authenticate
+def boxes(request):
+    if request.user.guild is None:
+        return HttpResponse('Guild does not exist', status=400)
+    guild = request.user.guild
+    response = [
+        user.detail_box for user in guild.users.all()
+    ]
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 

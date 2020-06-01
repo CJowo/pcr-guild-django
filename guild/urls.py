@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import create, guild_list, delete, users, info, join, leave, kick, operate, edit, applications, validate
+from .views import *
 
 
 urlpatterns = [
@@ -8,6 +8,7 @@ urlpatterns = [
     path('list', guild_list),
     path('delete', delete),
     path('users', users),
+    path('boxes', boxes),
     path('info', info),
     path('join', join),
     path('leave', leave),
