@@ -30,7 +30,6 @@ from .models import User
     'required':['username', 'password', 'nickname']
 })
 def register(request):
-    print(request.admin.register)
     if request.admin.register == False:
         return HttpResponse('Administrator prohibited this operation', status=403)
     try:
@@ -64,7 +63,7 @@ def login(request):
     if user.check_password(password) is False:
         return HttpResponse(content='Incorrect username or password', status=400)
     request.session['user_id'] = user.id.hex
-    return HttpResponse(json.dumps(user.detail), content_type='application/json')
+    return HttpResponse(json.dumps(user.detail_box), content_type='application/json')
 
 
 @allow(['POST', 'GET'])
