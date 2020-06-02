@@ -7,6 +7,7 @@ from django.db.utils import IntegrityError
 
 from pcr.utils import allow, authenticate, parameter, pagination, PATTERN_UUID_HEX
 from battle.models import Battle
+from user.models import User
 from .models import Report
 
 
@@ -34,6 +35,9 @@ from .models import Report
         'desc': {
             'type': 'string',
             'maxLength': 32
+        },
+        'username': {
+            'type': 'string'
         }
     },
     'required': ['index', 'round', 'finish', 'desc']
@@ -51,10 +55,19 @@ def create(request):
         finish = datetime.date(*map(int, request.data.get('finish').split('-')))
     else:
         finish = None
+    if 'username' in request.data and request.data.get('username') != '':
+        if request.user.operate is None:
+            return HttpResponse('No permission', status=403)
+        try:
+            user = User.objects.get(username=request.data.get('username'), guild=request.user.guild)
+        except User.DoesNotExist as err:
+            return HttpResponse(err, status=400)
+    else:
+        user = request.user
     desc = request.data.get('desc')
     value = request.data.get('value')
     round = request.data.get('round')
-    Report.objects.create(battle=battle, value=value, boss=boss, round=round, finish=finish, desc=desc, guild=request.user.guild, user=request.user)
+    Report.objects.create(battle=battle, value=value, boss=boss, round=round, finish=finish, desc=desc, guild=request.user.guild, user=user)
     return HttpResponse()
 
 
