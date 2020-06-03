@@ -1,4 +1,5 @@
 import uuid
+import datetime
 
 from django.db import models
 
@@ -10,6 +11,7 @@ class Report(models.Model):
     finish = models.DateField(null=True, blank=True)
     desc = models.CharField(default='', max_length=32)
     round = models.IntegerField(default=0)
+    create = models.DateTimeField(default=datetime.datetime.now())
 
     user = models.ForeignKey('user.User', on_delete=models.PROTECT, related_name='reports')
     battle = models.ForeignKey('battle.Battle', on_delete=models.CASCADE, related_name='reports')

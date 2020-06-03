@@ -22,7 +22,9 @@ from .models import Report
             'max': 5
         },
         'round': {
-            'type': 'number'
+            'type': 'number',
+            'min': 1,
+            'max': 26
         },
         'finish': {
             'type': 'string',
@@ -86,7 +88,9 @@ def create(request):
             'max': 5
         },
         'round': {
-            'type': 'number'
+            'type': 'number',
+            'min': 1,
+            'max': 26
         },
         'finish': {
             'type': 'string',
@@ -182,7 +186,7 @@ def report_list(request):
     response = {
         'count': reports.count(),
         'data': [
-            report.detail for report in reports.order_by('-finish').all()[start: end]
+            report.detail for report in reports.order_by('-finish', '-create').all()[start: end]
         ]
     }
     return HttpResponse(json.dumps(response), content_type='application/json')
@@ -200,7 +204,7 @@ def my_list(request):
     response = {
         'count': reports.count(),
         'data': [
-            report.detail for report in reports.order_by('-finish').all()[start: end]
+            report.detail for report in reports.order_by('-finish', '-create').all()[start: end]
         ]
     }
     return HttpResponse(json.dumps(response), content_type='application/json')
