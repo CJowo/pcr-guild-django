@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'character',
     'admin',
     'battle',
-    'report'
+    'report',
+    'strategy'
 ]
 
 MIDDLEWARE = [

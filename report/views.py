@@ -127,7 +127,6 @@ def edit(request):
         'desc':request.data.get('desc'),
         'value': request.data.get('value'),
         'round': request.data.get('round'),
-        'desc': request.data.get('desc'),
     }
     if 'finish' in request.data:
         data['finish'] = datetime.date(*map(int, request.data.get('finish').split('-')))
@@ -175,7 +174,7 @@ def report_list(request):
     try:
         battle = Battle.objects.get(close=None)
     except Battle.DoesNotExist as err:
-        return HttpResponse(err, status=400)
+        return HttpResponse('无正在进行的工会战', status=400)
     if request.user.guild is None:
         return HttpResponse('Guild does not exist', status=400)
     page = request.page
