@@ -4,10 +4,10 @@ from django.db import models
 
 
 class Character(models.Model):
-    PATTERN_NAME = r'^[a-z_]{1,16}$'
+    PATTERN_NAME = r'^[a-z_]{1,32}$'
 
     id = models.UUIDField(default=uuid.uuid1, primary_key=True)
-    name = models.CharField(max_length=16)
+    name = models.CharField(max_length=32)
     user = models.ForeignKey(to='user.User', on_delete=models.CASCADE, related_name='characters')
     rank = models.IntegerField(default=1)
     star = models.IntegerField(default=1)
