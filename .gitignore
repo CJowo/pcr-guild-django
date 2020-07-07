@@ -5,6 +5,3 @@
 
 /vue/*
 !/vue/.gitkeep
-
-*/migrations/*
-!*/migrations/__init__.py
