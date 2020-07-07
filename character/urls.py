@@ -6,5 +6,6 @@ from .views import *
 urlpatterns = [
     path('create', create),
     path('edit', edit),
-    path('delete', delete)
+    path('delete', delete),
+    path('image', image)
 ]

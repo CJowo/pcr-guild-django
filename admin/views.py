@@ -13,21 +13,22 @@ def admin(validate=True):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(request, *args, **kwargs):
-            if request.META.get('CONTENT_TYPE') == 'application/json':
-                try:
-                    data = json.loads(request.body)
-                except json.decoder.JSONDecodeError as err:
-                    return HttpResponseIncorrectParameter(content=err)
-            else:
-                data = request.POST
-            password = data.get('password')
             if Admin.objects.count() == 0:
                 admin = Admin.objects.create()
             else:
                 admin = Admin.objects.all()[0]
-            if validate and admin.password != password:
-                return HttpResponse('Incorrect password', status=400)
             request.admin = admin
+            if validate:
+                if request.META.get('CONTENT_TYPE') == 'application/json':
+                    try:
+                        data = json.loads(request.body)
+                    except json.decoder.JSONDecodeError as err:
+                        return HttpResponseIncorrectParameter(content=err)
+                else:
+                    data = request.POST
+                password = data.get('password')
+                if admin.password != password:
+                    return HttpResponse('Incorrect password', status=400)
             return func(request, *args, **kwargs)
 
         return wrapper
@@ -76,7 +77,19 @@ def password(request):
         },
         'guild': {
             'type': 'boolean'
-        }
+        },
+        'APP_ID': {
+            'type': 'string',
+            'maxLength': 16
+        },
+        'API_KEY': {
+            'type': 'string',
+            'maxLength': 32
+        },
+        'SECRET_KEY': {
+            'type': 'string',
+            'maxLength': 32
+        },
     },
     'required': []
 })

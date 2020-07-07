@@ -1,0 +1,377 @@
+{
+    "charactersx": [
+        {
+            "name": "shiori",
+            "images": [
+                "shiori.png",
+                "shiori#.png"
+            ]
+        }
+    ],
+    "characters": [
+        {
+            "name": "akari",
+            "images": [
+                "akari.png",
+                "akari#.png"
+            ]
+        },
+        {
+            "name": "akino",
+            "images": [
+                "akino.png",
+                "akino#.png"
+            ]
+        },
+        {
+            "name": "anna",
+            "images": [
+                "anna.png",
+                "anna#.png"
+            ]
+        },
+        {
+            "name": "aoi",
+            "images": [
+                "aoi.png",
+                "aoi#.png"
+            ]
+        },
+        {
+            "name": "ayane",
+            "images": [
+                "ayane.png",
+                "ayane#.png"
+            ]
+        },
+        {
+            "name": "chika",
+            "images": [
+                "chika.png",
+                "chika#.png"
+            ]
+        },
+        {
+            "name": "eriko",
+            "images": [
+                "eriko.png",
+                "eriko#.png"
+            ]
+        },
+        {
+            "name": "hatsune",
+            "images": [
+                "hatsune.png",
+                "hatsune#.png"
+            ]
+        },
+        {
+            "name": "hiyori",
+            "images": [
+                "hiyori.png",
+                "hiyori#.png"
+            ]
+        },
+        {
+            "name": "ilya",
+            "images": [
+                "ilya.png",
+                "ilya#.png"
+            ]
+        },
+        {
+            "name": "io",
+            "images": [
+                "io.png",
+                "io#.png"
+            ]
+        },
+        {
+            "name": "jiita",
+            "images": [
+                "jiita.png",
+                "jiita#.png"
+            ]
+        },
+        {
+            "name": "jun",
+            "images": [
+                "jun.png",
+                "jun#.png"
+            ]
+        },
+        {
+            "name": "kaori",
+            "images": [
+                "kaori.png",
+                "kaori#.png"
+            ]
+        },
+        {
+            "name": "kasumi",
+            "images": [
+                "kasumi.png",
+                "kasumi#.png"
+            ]
+        },
+        {
+            "name": "kokkoro",
+            "images": [
+                "kokkoro.png",
+                "kokkoro#.png"
+            ]
+        },
+        {
+            "name": "kurumi",
+            "images": [
+                "kurumi.png",
+                "kurumi#.png"
+            ]
+        },
+        {
+            "name": "kuuka",
+            "images": [
+                "kuuka.png",
+                "kuuka#.png"
+            ]
+        },
+        {
+            "name": "kyaru",
+            "images": [
+                "kyaru.png",
+                "kyaru#.png"
+            ]
+        },
+        {
+            "name": "kyouka",
+            "images": [
+                "kyouka.png",
+                "kyouka#.png"
+            ]
+        },
+        {
+            "name": "mahiru",
+            "images": [
+                "mahiru.png",
+                "mahiru#.png"
+            ]
+        },
+        {
+            "name": "maho",
+            "images": [
+                "maho.png",
+                "maho#.png"
+            ]
+        },
+        {
+            "name": "makoto",
+            "images": [
+                "makoto.png",
+                "makoto#.png"
+            ]
+        },
+        {
+            "name": "matsuri",
+            "images": [
+                "matsuri.png",
+                "matsuri#.png"
+            ]
+        },
+        {
+            "name": "mibuyu",
+            "images": [
+                "mibuyu.png",
+                "mibuyu#.png"
+            ]
+        },
+        {
+            "name": "mimi",
+            "images": [
+                "mimi.png",
+                "mimi#.png"
+            ]
+        },
+        {
+            "name": "misaki",
+            "images": [
+                "misaki.png",
+                "misaki#.png"
+            ]
+        },
+        {
+            "name": "misato",
+            "images": [
+                "misato.png",
+                "misato#.png"
+            ]
+        },
+        {
+            "name": "misogi",
+            "images": [
+                "misogi.png",
+                "misogi#.png"
+            ]
+        },
+        {
+            "name": "mitsuki",
+            "images": [
+                "mitsuki.png",
+                "mitsuki#.png"
+            ]
+        },
+        {
+            "name": "miyako",
+            "images": [
+                "miyako.png",
+                "miyako#.png"
+            ]
+        },
+        {
+            "name": "monika",
+            "images": [
+                "monika.png",
+                "monika#.png"
+            ]
+        },
+        {
+            "name": "nanaka",
+            "images": [
+                "nanaka.png",
+                "nanaka#.png"
+            ]
+        },
+        {
+            "name": "ninon",
+            "images": [
+                "ninon.png",
+                "ninon#.png"
+            ]
+        },
+        {
+            "name": "nozomi",
+            "images": [
+                "nozomi.png",
+                "nozomi#.png"
+            ]
+        },
+        {
+            "name": "pekoriinu",
+            "images": [
+                "pekoriinu.png",
+                "pekoriinu#.png"
+            ]
+        },
+        {
+            "name": "rei",
+            "images": [
+                "rei.png",
+                "rei#.png"
+            ]
+        },
+        {
+            "name": "rima",
+            "images": [
+                "rima.png",
+                "rima#.png"
+            ]
+        },
+        {
+            "name": "rin",
+            "images": [
+                "rin.png",
+                "rin#.png"
+            ]
+        },
+        {
+            "name": "rino",
+            "images": [
+                "rino.png",
+                "rino#.png"
+            ]
+        },
+        {
+            "name": "saren",
+            "images": [
+                "saren.png",
+                "saren#.png"
+            ]
+        },
+        {
+            "name": "shinobu",
+            "images": [
+                "shinobu.png",
+                "shinobu#.png"
+            ]
+        },
+        {
+            "name": "shiori",
+            "images": [
+                "shiori.png",
+                "shiori#.png"
+            ]
+        },
+        {
+            "name": "shizuru",
+            "images": [
+                "shizuru.png",
+                "shizuru#.png"
+            ]
+        },
+        {
+            "name": "suzume",
+            "images": [
+                "suzume.png",
+                "suzume#.png"
+            ]
+        },
+        {
+            "name": "suzuna",
+            "images": [
+                "suzuna.png",
+                "suzuna#.png"
+            ]
+        },
+        {
+            "name": "tamaki",
+            "images": [
+                "tamaki.png",
+                "tamaki#.png"
+            ]
+        },
+        {
+            "name": "tomo",
+            "images": [
+                "tomo.png",
+                "tomo#.png"
+            ]
+        },
+        {
+            "name": "yori",
+            "images": [
+                "yori.png",
+                "yori#.png"
+            ]
+        },
+        {
+            "name": "yui",
+            "images": [
+                "yui.png",
+                "yui#.png"
+            ]
+        },
+        {
+            "name": "yukari",
+            "images": [
+                "yukari.png",
+                "yukari#.png"
+            ]
+        },
+        {
+            "name": "yuki",
+            "images": [
+                "yuki.png",
+                "yuki#.png"
+            ]
+        }
+    ]
+}
