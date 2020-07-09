@@ -111,6 +111,57 @@ def clear(request):
 
 @allow(['POST'])
 @authenticate
+@parameter({
+    'type': 'array',
+    'items': {
+        'type': 'object',
+        'properties': {
+            'name': {
+                'type': 'string',
+                'pattern': Character.PATTERN_NAME
+            },
+            'rank': {
+                'type': 'number',
+                'min': 1
+            },
+            'star': {
+                'type': 'number',
+                'min': 1,
+                'max': 6
+            },
+            'exclusive': {
+                'type': 'number',
+                'min': 0
+            }
+        },
+        'required': ['name']
+    }
+}, data_format=False)
+def update(request):
+    res = {'s': [], 'f': []}
+    for item in request.data:
+        try:
+            request.user.characters.get(name=item['name']).delete()
+        except Character.DoesNotExist:
+            pass
+
+        try:
+            character = Character.objects.create(user=request.user, name=item['name'])
+            if 'rank' in item:
+                character.rank = item['rank']
+            if 'star' in item:
+                character.star = item['star']
+            if 'exclusive' in item:
+                character.exclusive = item['exclusive']
+            character.save()
+            res['s'].append(item)
+        except IntegrityError as err:
+            res['f'].append({'name': item['name'], 'err': err})
+    return HttpResponse(json.dumps(res), content_type='application/json')
+
+
+@allow(['POST'])
+@authenticate
 def image(request):
     file_obj = request.FILES.get('file')
     buf = numpy.asarray(bytearray(file_obj.read()))

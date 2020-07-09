@@ -47,7 +47,7 @@ def allow(methods: list):
     return decorator
 
 
-def parameter(schema: object):
+def parameter(schema: object, data_format=True):
     """
     api参数JsonSchema验证
 
@@ -73,12 +73,15 @@ def parameter(schema: object):
                 validate(data, schema)
             except ValidationError as err:
                 return HttpResponseIncorrectParameter(content=err)
-            properties = schema.get('properties', {})
-            request.data = {
-                key: data.get(key) if key in data else properties[key]['default']
-                for key in properties
-                if key in data or 'default' in properties[key]
-            }
+            if data_format:
+                properties = schema.get('properties', {})
+                request.data = {
+                    key: data.get(key) if key in data else properties[key]['default']
+                    for key in properties
+                    if key in data or 'default' in properties[key]
+                }
+            else:
+                request.data = data
             return func(request, *args, **kwargs)
         
         return wrapper
