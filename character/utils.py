@@ -41,6 +41,9 @@ class BoxImage:
     
     def read_template(self):
         """读入模板"""
+        self.__character_images = []
+        self.__number_images = []
+
         with open(os.path.join(TEMPLATE_PATH, 'template.json'), 'r', encoding='utf8') as f:
             template_info = json.loads(f.read())
 
