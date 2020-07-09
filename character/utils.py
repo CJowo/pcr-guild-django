@@ -13,12 +13,6 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'template')
 
 class BoxImage:
     """Box图像识别类"""
-    __image = None
-    __image_gray = None
-    __character_images = []
-    __rank_image = None
-    __number_images = []
-
     def __init__(self, *, image=None, src=None, threshold=0.8, max_workers=5):
         """
         :param image: cv图像对象
