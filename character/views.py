@@ -5,7 +5,6 @@ from django.http.response import HttpResponse
 from django.db.utils import IntegrityError
 import numpy
 import cv2
-from aip import AipOcr
 
 from pcr.utils import allow, authenticate, parameter, pagination, PATTERN_UUID_HEX
 from .models import Character
@@ -104,16 +103,17 @@ def delete(request):
 
 @allow(['POST'])
 @authenticate
-@admin(False)
+def clear(request):
+    for character in request.user.characters.all():
+        character.delete()
+    return HttpResponse()
+
+
+@allow(['POST'])
+@authenticate
 def image(request):
     file_obj = request.FILES.get('file')
     buf = numpy.asarray(bytearray(file_obj.read()))
     img = cv2.imdecode(buf, cv2.IMREAD_COLOR)
-    APP_ID = request.admin.APP_ID
-    API_KEY = request.admin.API_KEY
-    SECRET_KEY = request.admin.SECRET_KEY
-    client = None
-    if SECRET_KEY and API_KEY and APP_ID:
-        client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
-    box = BoxImage(image=img, client=client)
+    box = BoxImage(image=img)
     return HttpResponse(json.dumps(box.characters), content_type='application/json')

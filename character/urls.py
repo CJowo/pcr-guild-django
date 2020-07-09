@@ -7,5 +7,6 @@ urlpatterns = [
     path('create', create),
     path('edit', edit),
     path('delete', delete),
-    path('image', image)
+    path('image', image),
+    path('clear', clear)
 ]

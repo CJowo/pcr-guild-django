@@ -12,6 +12,7 @@
 
 目前正在开发
 
+- [ ] BOX角色排序
 - [ ] 公会战作业轴上传查看
 - [ ] 公会战出刀结果完全统计
 - [ ] 报错信息优化
@@ -51,14 +52,3 @@
 `sqlite> UPDATE admin_admin SET password = '新密码';`
 
 `sqlite> .quit`
-
-
-### 游戏截图识别BOX(测试)
-
-RANK识别功能需要使用百度OCR，在[百度AI开放平台](https://ai.baidu.com/tech/ocr/general)创建通用文字识别应用，并将`APP_ID`, `API_KEY`, `SECRET_KEY`填入管理页面。
-
-不填则只进行星级和角色识别，RANK默认为0。
-
-目前人物列表不全，数量约为国服人物数量。
-
-暂未对除国服以外的其他服截图进行测试，效果不确定。

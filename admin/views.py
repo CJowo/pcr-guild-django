@@ -77,19 +77,7 @@ def password(request):
         },
         'guild': {
             'type': 'boolean'
-        },
-        'APP_ID': {
-            'type': 'string',
-            'maxLength': 16
-        },
-        'API_KEY': {
-            'type': 'string',
-            'maxLength': 32
-        },
-        'SECRET_KEY': {
-            'type': 'string',
-            'maxLength': 32
-        },
+        }
     },
     'required': []
 })
