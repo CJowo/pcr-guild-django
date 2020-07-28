@@ -90,7 +90,9 @@ class BoxImage:
         res = self.__character(image)
         if res is None: return None
         # 剪裁图片
+        if res[0]-32 < 0 or res[1]-32 < 0: return None
         image_cut = self.__image[res[0]-32:res[0]+96, res[1]-32:res[1]+96]
+        if image_cut.shape[0] < 128 or image_cut.shape[1] < 128: return None
         star = self.__star(image_cut)
         rank = self.__rank(image_cut)
         return {
