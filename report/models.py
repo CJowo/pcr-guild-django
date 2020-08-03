@@ -11,7 +11,7 @@ class Report(models.Model):
     finish = models.DateField(null=True, blank=True)
     desc = models.CharField(default='', max_length=32)
     round = models.IntegerField(default=0)
-    create = models.DateTimeField(default=datetime.datetime.now())
+    create = models.DateTimeField(auto_now_add=True)
 
     user = models.ForeignKey('user.User', on_delete=models.PROTECT, related_name='reports')
     battle = models.ForeignKey('battle.Battle', on_delete=models.CASCADE, related_name='reports')
@@ -28,6 +28,7 @@ class Report(models.Model):
             'finish': self.finish.strftime("%Y-%m-%d") if self.finish is not None else None,
             'desc': self.desc,
             'user': self.user.detail,
+            'create': self.create.timestamp()
         }
     
 
