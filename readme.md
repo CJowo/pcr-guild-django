@@ -52,3 +52,9 @@
 `sqlite> UPDATE admin_admin SET password = '新密码';`
 
 `sqlite> .quit`
+
+### 交流群
+
+QQ群:476889661
+
+![QQ](https://github.com/CJowo/pcr-guild-django/blob/master/QQ.png)
