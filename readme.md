@@ -53,6 +53,10 @@
 
 `sqlite> .quit`
 
+### 备注
+
+- 报错缺少DLL，请在windows功能中，安装Media Foundation
+
 ### 交流群
 
 QQ群:476889661
