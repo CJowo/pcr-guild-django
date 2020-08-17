@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/character/', include('character.urls')),
     path('api/admin/', include('admin.urls')),
     path('api/report/', include('report.urls')),
+    path('api/strategy/', include('strategy.urls')),
     re_path('^(?!(js|css|img|fonts|statics)).*', index),
     re_path('(?P<path>^(js|css|img|fonts|statics).*)', static.serve, { 'document_root': settings.STATIC_ROOT })
 ]
